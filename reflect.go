@@ -99,6 +99,10 @@ type Reflector struct {
 	// ExpandedStruct will cause the toplevel definitions of the schema not
 	// be referenced itself to a definition.
 	ExpandedStruct bool
+
+	// ReflectTypeFunc allow to define custom type reflector. If function return
+	// non-nil value it will be used for schema
+	ReflectTypeFunc func(definitions Definitions, t reflect.Type) *Type
 }
 
 // Reflect reflects to Schema from a value.
@@ -159,6 +163,12 @@ func (r *Reflector) reflectTypeToSchema(definitions Definitions, t reflect.Type)
 	// Already added to definitions?
 	if _, ok := definitions[t.Name()]; ok {
 		return &Type{Ref: "#/definitions/" + t.Name()}
+	}
+
+	if r.ReflectTypeFunc != nil {
+		if res := r.ReflectTypeFunc(definitions, t); res != nil {
+			return res
+		}
 	}
 
 	// jsonpb will marshal protobuf enum options as either strings or integers.
