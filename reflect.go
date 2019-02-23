@@ -328,11 +328,7 @@ func (t *Type) stringKeywords(tags []string) {
 			case "pattern":
 				t.Pattern = val
 			case "format":
-				switch val {
-				case "date-time", "email", "hostname", "ipv4", "ipv6", "uri":
-					t.Format = val
-					break
-				}
+				t.Format = val
 			}
 		}
 	}
