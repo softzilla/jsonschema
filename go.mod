@@ -1,1 +1,1 @@
-module github.com/alecthomas/jsonschema
+module github.com/softzilla/jsonschema
